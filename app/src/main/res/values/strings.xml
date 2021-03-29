@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CoroutineRetrofit</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+</resources>
