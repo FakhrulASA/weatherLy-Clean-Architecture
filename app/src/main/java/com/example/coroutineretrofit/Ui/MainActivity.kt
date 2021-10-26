@@ -1,6 +1,7 @@
 package com.example.coroutineretrofit.Ui
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,8 +15,6 @@ import com.example.coroutineretrofit.Repository.PostRepo
 class MainActivity : AppCompatActivity() {
     private lateinit var postRepo: PostRepo
     private lateinit var postAdapter: PostAdapter
-    private lateinit var postViewModel: PostViewModel
-    private lateinit var postViewModelFactory: PostViewModelFactory
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,11 +22,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
+        val postViewModel: PostViewModel by viewModels()
         recyclerView = findViewById(R.id.recycleLayout)
         postRepo = PostRepo()
-        postViewModelFactory = PostViewModelFactory(postRepo)
-        postViewModel = ViewModelProvider(this, postViewModelFactory).get(PostViewModel::class.java)
-        postViewModel.getPost()
         postViewModel.myResponse.observe(this, Observer {
             postAdapter.setData(it as ArrayList<PostData>)
         })

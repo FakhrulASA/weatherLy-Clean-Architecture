@@ -1,5 +1,7 @@
 package com.example.coroutineretrofit.Ui
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,11 +12,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class PostViewModel(private val postRepo: PostRepo): ViewModel() {
+class PostViewModel:ViewModel() {
+    var postRepo:PostRepo=PostRepo()
     val myResponse:MutableLiveData<List<PostData>> = MutableLiveData()
     val isLoading:MutableLiveData<Boolean> = MutableLiveData()
 
-    fun getPost(){
+    init {
         viewModelScope.launch{
             try {
                 val response=postRepo.getAllPost()
@@ -25,4 +28,6 @@ class PostViewModel(private val postRepo: PostRepo): ViewModel() {
             }
         }
     }
+
+
 }
