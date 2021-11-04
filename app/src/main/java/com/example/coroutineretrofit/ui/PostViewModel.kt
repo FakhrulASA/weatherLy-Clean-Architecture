@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.coroutineretrofit.interactor.LoginUserUseCase
 import com.example.coroutineretrofit.model.PostData
 import com.example.coroutineretrofit.repository.PostRepo
+import com.example.coroutineretrofit.util.ErrorBody
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,15 +18,16 @@ class PostViewModel : ViewModel() {
     var loginUserUseCase: LoginUserUseCase = LoginUserUseCase()
     var myResponse: MutableLiveData<PostData> = MutableLiveData()
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
-    val error:MutableLiveData<Boolean> = MutableLiveData()
+    val error:MutableLiveData<ErrorBody> = MutableLiveData()
+
 
     fun getWeather(lat:Double,lon:Double){
         CoroutineScope(Dispatchers.IO).launch {
             loginUserUseCase.invoke(lat,lon,{
-                error.postValue(false)
+                error.postValue(ErrorBody(false,"success"))
                 myResponse.postValue(it)
             },{
-                error.postValue(true)
+                error.postValue(ErrorBody(true,it))
             })
         }
 

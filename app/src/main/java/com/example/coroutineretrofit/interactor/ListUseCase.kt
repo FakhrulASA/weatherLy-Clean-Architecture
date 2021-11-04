@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 class LoginUserUseCase {
     var postRepo: PostRepo = PostRepo()
 
-    suspend operator fun invoke(lat:Double,lon:Double,isSuccess:(PostData)->Unit,isFailed:()->Unit) {
+    operator fun invoke(lat:Double,lon:Double,isSuccess:(PostData)->Unit,isFailed:(String)->Unit) {
         val weather = postRepo.getAllPost(lat,lon)
         CoroutineScope(Dispatchers.IO).launch {
             weather.execute().apply {
                 when (this.isSuccessful){
                     true->isSuccess.invoke(this.body()!!)
-                    false->isFailed.invoke()
+                    false->isFailed.invoke(this.message())
                 }
             }
         }

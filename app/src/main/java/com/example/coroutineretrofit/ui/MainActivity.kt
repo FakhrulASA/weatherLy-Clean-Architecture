@@ -121,8 +121,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
             postRepo = PostRepo()
             postViewModel.getWeather(it.latitude, it.longitude)
             postViewModel.error.observe(this) {
-                when (it) {
-                    true -> showToast(this, "Error Occured")
+                when (it.isError) {
+                    true -> showToast(this, it.message)
                     false -> {
                         postViewModel.myResponse.observe(this, Observer { post ->
                             name.text = "Current weather: " + post.data?.get(0)?.cityName
