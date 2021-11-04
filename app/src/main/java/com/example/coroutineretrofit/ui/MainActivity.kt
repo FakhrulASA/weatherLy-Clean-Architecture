@@ -118,12 +118,18 @@ class MainActivity : AppCompatActivity() , LocationListener {
         latitude = it.latitude
         longitude = it.longitude
         if (isInternetAvailable(this)) {
+
             postRepo = PostRepo()
             postViewModel.getWeather(it.latitude,it.longitude)
             postViewModel.myResponse.observe(this, Observer {post->
-                name.text="Current weather: "+post.data?.get(0)?.cityName
-                temp.text="Temperature\n"+post.data?.get(0)?.temp+"°C"
-                des.text="Sky status\n"+post.data?.get(0)?.weather?.description
+                if(!postViewModel.error){
+                    name.text="Current weather: "+post.data?.get(0)?.cityName
+                    temp.text="Temperature\n"+post.data?.get(0)?.temp+"°C"
+                    des.text="Sky status\n"+post.data?.get(0)?.weather?.description
+                }else{
+                    Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
+                }
+
             })
         } else {
             showToast(this, "Internet Not Available")

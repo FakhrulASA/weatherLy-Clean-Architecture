@@ -13,11 +13,19 @@ class PostViewModel : ViewModel() {
     var loginUserUseCase: LoginUserUseCase = LoginUserUseCase()
     var myResponse: MutableLiveData<PostData> = MutableLiveData()
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
-
+    var error : Boolean=false
 
     fun getWeather(lat:Double,lon:Double){
         viewModelScope.launch {
-            myResponse.postValue(loginUserUseCase.invoke(lat,lon))
+            var data=loginUserUseCase.invoke(lat,lon)
+            if(data.equals("failed"))
+            {
+                error=true
+            }
+            else{
+                myResponse.postValue(loginUserUseCase.invoke(lat,lon) as PostData)
+            }
+
         }
 
     }

@@ -6,8 +6,13 @@ import com.example.coroutineretrofit.repository.PostRepo
 class LoginUserUseCase {
     var postRepo: PostRepo = PostRepo()
 
-    suspend operator fun invoke(lat:Double,lon:Double): PostData {
+    suspend operator fun invoke(lat:Double,lon:Double): Any {
         val response = postRepo.getAllPost(lat,lon)
-        return response
+        val data=response.execute()
+        return if(data.isSuccessful){
+            data.body()!!
+        } else {
+            "failed"
+        }
     }
 }
