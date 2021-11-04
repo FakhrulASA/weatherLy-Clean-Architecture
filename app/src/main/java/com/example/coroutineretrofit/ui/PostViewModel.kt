@@ -17,15 +17,20 @@ class PostViewModel : ViewModel() {
     var myResponse: MutableLiveData<WeatherData> = MutableLiveData()
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
     val error:MutableLiveData<ErrorBody> = MutableLiveData()
+    val isLooding:MutableLiveData<Boolean> = MutableLiveData()
 
 
     fun getWeather(weatherRequestModel: WeatherRequestModel){
+        isLoading.postValue(true)
         CoroutineScope(Dispatchers.IO).launch {
             weatherUsecase.invoke(weatherRequestModel,{
                 error.postValue(ErrorBody(false,"success"))
                 myResponse.postValue(it)
+                isLoading.postValue(false)
             },{
                 error.postValue(ErrorBody(true,it))
+                isLoading.postValue(false)
+
             })
         }
 

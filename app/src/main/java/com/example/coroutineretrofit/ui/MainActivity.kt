@@ -7,6 +7,8 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var name: TextView
     private lateinit var temp: TextView
     private lateinit var des: TextView
+    private lateinit var wind: TextView
+    private lateinit var feel: TextView
+    private lateinit var isProgressing: ProgressBar
     private lateinit var weatherRequestModel: WeatherRequestModel
     val postViewModel: PostViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +45,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         name = findViewById(R.id.textView)
         temp = findViewById(R.id.temperature)
         des = findViewById(R.id.sky)
+        wind = findViewById(R.id.windspeed)
+        feel = findViewById(R.id.feels)
+        isProgressing=findViewById(R.id.progressBar)
         weatherRequestModel= WeatherRequestModel()
+        initProgressBar()
         val locManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
         if (ActivityCompat.checkSelfPermission(
@@ -73,6 +82,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
 
+    }
+
+    private fun initProgressBar() {
+       postViewModel.isLoading.observe(this,{
+           when(it){
+               true->isProgressing.visibility= View.VISIBLE
+               false->isProgressing.visibility= View.GONE
+           }
+       })
     }
 
     private fun isPermissionGranted(): Boolean {
@@ -128,6 +146,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
                         postViewModel.myResponse.observe(this, Observer { post ->
                             name.text = "Current weather: " + post.data?.get(0)?.cityName
                             temp.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
+                            wind.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
+                            feel.text = "Wind Direction\n" + when(post.data?.get(0)?.windCdir){
+                                "N"->"North"
+                                "S"->"South"
+                                "W"->"West"
+                                "E"->"East"
+                                "SW"->"South West"
+                                "SE"->"South East"
+                                else -> "N/A"
+                            }
                             des.text = "Sky status\n" + post.data?.get(0)?.weather?.description
                         })
                     }
