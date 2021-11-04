@@ -1,11 +1,11 @@
 package com.example.coroutineretrofit.repository
 
-import com.example.coroutineretrofit.model.PostData
+import com.example.coroutineretrofit.model.WeatherData
 import com.example.coroutineretrofit.network.RetroBuilder
 import retrofit2.Call
 
-class PostRepo {
-    fun getAllPost(lat:Double,lon:Double): Call<PostData> {
+class WeatherRepository {
+    fun getAllPost(lat:Double,lon:Double): Call<WeatherData> {
        return  RetroBuilder.api.getPost(lat,lon)
     }
 }

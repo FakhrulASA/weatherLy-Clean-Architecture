@@ -7,9 +7,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,22 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.R
-import com.example.coroutineretrofit.repository.PostRepo
-import com.example.coroutineretrofit.util.Util
+import com.example.coroutineretrofit.model.WeatherRequestModel
+import com.example.coroutineretrofit.repository.WeatherRepository
 import com.example.coroutineretrofit.util.Util.isInternetAvailable
 import com.example.coroutineretrofit.util.Util.showToast
 
 class MainActivity : AppCompatActivity(), LocationListener {
-    private lateinit var postRepo: PostRepo
+    private lateinit var weatherRepository: WeatherRepository
     private lateinit var postAdapter: PostAdapter
     private lateinit var recyclerView: RecyclerView
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var name: TextView
     private lateinit var temp: TextView
     private lateinit var des: TextView
+    private lateinit var weatherRequestModel: WeatherRequestModel
     val postViewModel: PostViewModel by viewModels()
-    var latitude: Double = 35.0
-    var longitude: Double = -75.5
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,6 +40,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         name = findViewById(R.id.textView)
         temp = findViewById(R.id.temperature)
         des = findViewById(R.id.sky)
+        weatherRequestModel= WeatherRequestModel()
         val locManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
         if (ActivityCompat.checkSelfPermission(
@@ -114,12 +112,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private val mLocationListener: LocationListener = LocationListener {
-        latitude = it.latitude
-        longitude = it.longitude
+    private val mLocationListener: LocationListener = LocationListener { location->
         if (isInternetAvailable(this)) {
-            postRepo = PostRepo()
-            postViewModel.getWeather(it.latitude, it.longitude)
+            weatherRepository = WeatherRepository()
+            postViewModel.getWeather(
+                weatherRequestModel.apply {
+                    lat=location.latitude
+                    lon=location.longitude
+                }
+            )
             postViewModel.error.observe(this) {
                 when (it.isError) {
                     true -> showToast(this, it.message)

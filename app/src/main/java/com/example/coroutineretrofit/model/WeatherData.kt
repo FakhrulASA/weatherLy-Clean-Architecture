@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
 
-class PostData {
+class WeatherData {
     @SerializedName("data")
     @Expose
     var data: List<Datum>? = null

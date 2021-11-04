@@ -1,9 +1,8 @@
 package com.example.coroutineretrofit.network
 
-import com.example.coroutineretrofit.model.PostData
+import com.example.coroutineretrofit.model.WeatherData
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
@@ -13,5 +12,5 @@ interface ApiInterface {
     fun getPost(
         @Query("lat") lat:Double,
         @Query("lon") lon:Double
-    ): Call<PostData>
+    ): Call<WeatherData>
 }
