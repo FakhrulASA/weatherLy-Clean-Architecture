@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.R
+import com.example.coroutineretrofit.databinding.ActivityMainBinding
 import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
 import com.example.coroutineretrofit.util.Util.isInternetAvailable
@@ -29,29 +31,24 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var postAdapter: PostAdapter
     private lateinit var recyclerView: RecyclerView
     private val REQUEST_LOCATION_PERMISSION = 1
-    private lateinit var name: TextView
-    private lateinit var temp: TextView
-    private lateinit var des: TextView
-    private lateinit var wind: TextView
-    private lateinit var feel: TextView
-    private lateinit var isProgressing: ProgressBar
     private lateinit var weatherRequestModel: WeatherRequestModel
+    private lateinit var binding: ActivityMainBinding
+    lateinit var locManager:LocationManager
     val postViewModel: PostViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         initRecyclerView()
-        name = findViewById(R.id.textView)
-        temp = findViewById(R.id.temperature)
-        des = findViewById(R.id.sky)
-        wind = findViewById(R.id.windspeed)
-        feel = findViewById(R.id.feels)
-        isProgressing=findViewById(R.id.progressBar)
         weatherRequestModel= WeatherRequestModel()
         initProgressBar()
-        val locManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        locManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        checkPermission()
+        recyclerView = findViewById(R.id.recycleLayout)
+    }
 
+    private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -60,35 +57,40 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }else{
+            locManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000L,
+                500.0f,
+                mLocationListener
+            )
         }
-        locManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            1000L,
-            500.0f,
-            mLocationListener
-        )
+    }
 
-        recyclerView = findViewById(R.id.recycleLayout)
-
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty()
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            checkPermission()
+        } else {
+            checkPermission()
+        }
     }
 
     private fun initProgressBar() {
        postViewModel.isLoading.observe(this,{
            when(it){
-               true->isProgressing.visibility= View.VISIBLE
-               false->isProgressing.visibility= View.GONE
+               true->binding.progressBar.visibility= View.VISIBLE
+               false->binding.progressBar.visibility= View.GONE
            }
        })
     }
@@ -110,17 +112,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return
+                showToast(this,"Need Permission")
             }
 
         } else {
+
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -144,10 +140,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     true -> showToast(this, it.message)
                     false -> {
                         postViewModel.myResponse.observe(this, Observer { post ->
-                            name.text = "Current weather: " + post.data?.get(0)?.cityName
-                            temp.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
-                            wind.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
-                            feel.text = "Wind Direction\n" + when(post.data?.get(0)?.windCdir){
+                            binding.textView.text = "Current weather: " + post.data?.get(0)?.cityName
+                            binding.temperature.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
+                            binding.windspeed.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
+                            binding.feels.text = "Wind Direction\n" + when(post.data?.get(0)?.windCdir){
                                 "N"->"North"
                                 "S"->"South"
                                 "W"->"West"
@@ -156,7 +152,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                                 "SE"->"South East"
                                 else -> "N/A"
                             }
-                            des.text = "Sky status\n" + post.data?.get(0)?.weather?.description
+                            binding.sky.text = "Sky status\n" + post.data?.get(0)?.weather?.description
                         })
                     }
                 }

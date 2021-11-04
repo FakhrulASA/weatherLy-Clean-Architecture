@@ -1,140 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    tools:context=".ui.MainActivity">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleLayout"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:itemCount="5"
-        tools:listitem="@layout/item"
-        android:visibility="gone"
-        tools:layout_editor_absoluteX="185dp"
-        tools:layout_editor_absoluteY="254dp" />
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".ui.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Current weather of: N/A"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="5"
+            tools:listitem="@layout/item"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="185dp"
+            tools:layout_editor_absoluteY="254dp" />
 
         <TextView
-            android:id="@+id/temperature"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Current weather of: N/A"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/round"
-            android:backgroundTint="#4D9FD1"
-            android:fontFamily="@font/droid_sans_bold"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:text="N/A"
-            android:textAlignment="center"
-            android:textColor="#272A3C"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <TextView
-            android:id="@+id/sky"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/round"
-            android:backgroundTint="#9679D1"
-            android:fontFamily="@font/droid_sans_bold"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:text="N/A"
-            android:textAlignment="center"
-            android:textColor="#272A3C"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#4D9FD1"
+                android:fontFamily="@font/droid_sans_bold"
+                android:gravity="center"
+                android:paddingVertical="10dp"
+                android:text="N/A"
+                android:textAlignment="center"
+                android:textColor="#272A3C"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/windspeed"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/round"
-            android:backgroundTint="#BA597D"
-            android:fontFamily="@font/droid_sans_bold"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:text="N/A"
-            android:textAlignment="center"
-            android:textColor="#510D26"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/sky"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#9679D1"
+                android:fontFamily="@font/droid_sans_bold"
+                android:gravity="center"
+                android:paddingVertical="10dp"
+                android:text="N/A"
+                android:textAlignment="center"
+                android:textColor="#272A3C"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/feels"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/round"
-            android:backgroundTint="#D16F6D"
-            android:fontFamily="@font/droid_sans_bold"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:text="N/A"
-            android:textAlignment="center"
-            android:textColor="#681311"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:scrollbarStyle="insideOverlay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            <TextView
+                android:id="@+id/windspeed"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#BA597D"
+                android:fontFamily="@font/droid_sans_bold"
+                android:gravity="center"
+                android:paddingVertical="10dp"
+                android:text="N/A"
+                android:textAlignment="center"
+                android:textColor="#510D26"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/feels"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/round"
+                android:backgroundTint="#D16F6D"
+                android:fontFamily="@font/droid_sans_bold"
+                android:gravity="center"
+                android:paddingVertical="10dp"
+                android:text="N/A"
+                android:textAlignment="center"
+                android:textColor="#681311"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:scrollbarStyle="insideOverlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
