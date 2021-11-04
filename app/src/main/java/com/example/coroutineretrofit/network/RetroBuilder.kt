@@ -1,8 +1,8 @@
-package com.example.coroutineretrofit.Network
+package com.example.coroutineretrofit.network
 
+import com.example.coroutineretrofit.util.BaseUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class RetroBuilder {
     companion object{
@@ -16,5 +16,6 @@ class RetroBuilder {
         val api:ApiInterface by lazy {
             retrofit.create(ApiInterface::class.java)
         }
+
     }
 }
