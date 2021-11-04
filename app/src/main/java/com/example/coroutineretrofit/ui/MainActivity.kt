@@ -24,14 +24,14 @@ import com.example.coroutineretrofit.util.Util
 import com.example.coroutineretrofit.util.Util.isInternetAvailable
 import com.example.coroutineretrofit.util.Util.showToast
 
-class MainActivity : AppCompatActivity() , LocationListener {
+class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var postRepo: PostRepo
     private lateinit var postAdapter: PostAdapter
     private lateinit var recyclerView: RecyclerView
     private val REQUEST_LOCATION_PERMISSION = 1
-    private lateinit var name:TextView
-    private lateinit var temp:TextView
-    private lateinit var des:TextView
+    private lateinit var name: TextView
+    private lateinit var temp: TextView
+    private lateinit var des: TextView
     val postViewModel: PostViewModel by viewModels()
     var latitude: Double = 35.0
     var longitude: Double = -75.5
@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity() , LocationListener {
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        name=findViewById(R.id.textView)
-        temp=findViewById(R.id.temperature)
-        des=findViewById(R.id.sky)
+        name = findViewById(R.id.textView)
+        temp = findViewById(R.id.temperature)
+        des = findViewById(R.id.sky)
         val locManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
         if (ActivityCompat.checkSelfPermission(
@@ -119,12 +119,20 @@ class MainActivity : AppCompatActivity() , LocationListener {
         longitude = it.longitude
         if (isInternetAvailable(this)) {
             postRepo = PostRepo()
-            postViewModel.getWeather(it.latitude,it.longitude)
-            postViewModel.myResponse.observe(this, Observer {post->
-                name.text="Current weather: "+post.data?.get(0)?.cityName
-                temp.text="Temperature\n"+post.data?.get(0)?.temp+"°C"
-                des.text="Sky status\n"+post.data?.get(0)?.weather?.description
-            })
+            postViewModel.getWeather(it.latitude, it.longitude)
+            postViewModel.error.observe(this) {
+                when (it) {
+                    true -> showToast(this, "Error Occured")
+                    false -> {
+                        postViewModel.myResponse.observe(this, Observer { post ->
+                            name.text = "Current weather: " + post.data?.get(0)?.cityName
+                            temp.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
+                            des.text = "Sky status\n" + post.data?.get(0)?.weather?.description
+                        })
+                    }
+                }
+            }
+
         } else {
             showToast(this, "Internet Not Available")
         }
@@ -137,7 +145,7 @@ class MainActivity : AppCompatActivity() , LocationListener {
         recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter=postAdapter
+            adapter = postAdapter
 
         }
     }
