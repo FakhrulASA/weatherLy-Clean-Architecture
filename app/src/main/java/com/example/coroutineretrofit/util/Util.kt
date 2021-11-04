@@ -1,12 +1,8 @@
 package com.example.coroutineretrofit.util
 
 import android.content.Context
-import androidx.core.content.ContextCompat.getSystemService
-
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import androidx.core.content.ContextCompat
-import android.net.NetworkInfo
 import android.os.Build
 import android.widget.Toast
 
@@ -15,7 +11,7 @@ object Util {
     /**
      * CHECK WHETHER INTERNET CONNECTION IS AVAILABLE OR NOT
      */
-     fun isInternetAvailable(context: Context): Boolean {
+    fun isInternetAvailable(context: Context): Boolean {
         var result = false
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -45,7 +41,7 @@ object Util {
         return result
     }
 
-    fun showToast(context: Context, s:String) {
+    fun showToast(context: Context, s: String) {
         Toast.makeText(context, s, Toast.LENGTH_LONG).show()
     }
 }

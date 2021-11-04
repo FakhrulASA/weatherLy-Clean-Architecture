@@ -8,9 +8,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,8 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.R
+import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.databinding.ActivityMainBinding
 import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
