@@ -1,4 +1,4 @@
-package com.example.coroutineretrofit.Adapter
+package com.example.coroutineretrofit.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coroutineretrofit.Model.PostData
+import com.example.coroutineretrofit.model.PostData
 import com.example.coroutineretrofit.R
 
 class PostAdapter(private val context: Context, private var postList: ArrayList<PostData>) :
@@ -14,8 +14,8 @@ class PostAdapter(private val context: Context, private var postList: ArrayList<
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //
         fun bindView(list : ArrayList<PostData>, position : Int){
-            itemView.findViewById<AppCompatTextView>(R.id.title2).text=list.get(position).title
-            itemView.findViewById<AppCompatTextView>(R.id.description).text=list.get(position).id.toString()
+//            itemView.findViewById<AppCompatTextView>(R.id.title2).text=list.get(position).title
+//            itemView.findViewById<AppCompatTextView>(R.id.description).text=list.get(position).id.toString()
         }
 
 

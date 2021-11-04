@@ -1,5 +1,7 @@
-package com.example.coroutineretrofit.Network
+package com.example.coroutineretrofit.interactor
 
+import com.example.coroutineretrofit.util.Either
+import com.example.coroutineretrofit.util.Failure
 import kotlinx.coroutines.*
 
 abstract class UseCase<out Type, in Params> where Type : Any {

@@ -1,16 +1,18 @@
-package com.example.coroutineretrofit.Ui
+package com.example.coroutineretrofit.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coroutineretrofit.Adapter.PostAdapter
-import com.example.coroutineretrofit.Model.PostData
+import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.R
-import com.example.coroutineretrofit.Repository.PostRepo
+import com.example.coroutineretrofit.repository.PostRepo
+import com.example.coroutineretrofit.util.Util
+import com.example.coroutineretrofit.util.Util.isInternetAvailable
+import com.example.coroutineretrofit.util.Util.showToast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var postRepo: PostRepo
@@ -24,13 +26,20 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
         val postViewModel: PostViewModel by viewModels()
         recyclerView = findViewById(R.id.recycleLayout)
-        postRepo = PostRepo()
-        postViewModel.myResponse.observe(this, Observer {
-            postAdapter.setData(it as ArrayList<PostData>)
-        })
+        if(isInternetAvailable(this)){
+            postRepo = PostRepo()
+            postViewModel.myResponse.observe(this, Observer {
+                Toast.makeText(this,it,Toast.LENGTH_LONG).show()
+            })
+        }else{
+            showToast(this,"Internet Not Available")
+        }
+
 
 
     }
+
+
 
     private fun initRecyclerView() {
         recyclerView = findViewById(R.id.recycleLayout)

@@ -1,5 +1,8 @@
-package com.example.coroutineretrofit.Network
+package com.example.coroutineretrofit.network
 
+import com.example.coroutineretrofit.util.Either
+import com.example.coroutineretrofit.util.Failure
+import com.example.coroutineretrofit.util.SOMETHING_WENT_WRONG
 import retrofit2.Call
 
 class ApiClient {

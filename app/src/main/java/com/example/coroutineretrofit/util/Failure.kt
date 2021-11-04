@@ -1,4 +1,4 @@
-package com.example.coroutineretrofit.Network
+package com.example.coroutineretrofit.util
 
 /**
  * Base Class for handling errors/failures/exceptions.
