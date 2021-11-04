@@ -7,6 +7,8 @@
 5. Live Data and Mutable Live Data
 6. Connectivity Manager
 
+### Docs: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html, https://developer.android.com/jetpack/guide
+### Api: https://rapidapi.com/weatherbit/api/weather/
 # Demo Application
 
 <p align="center">
