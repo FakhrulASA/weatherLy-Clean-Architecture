@@ -1,9 +1,19 @@
 package com.example.coroutineretrofit.ui
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,31 +24,111 @@ import com.example.coroutineretrofit.util.Util
 import com.example.coroutineretrofit.util.Util.isInternetAvailable
 import com.example.coroutineretrofit.util.Util.showToast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , LocationListener {
     private lateinit var postRepo: PostRepo
     private lateinit var postAdapter: PostAdapter
     private lateinit var recyclerView: RecyclerView
-
+    private val REQUEST_LOCATION_PERMISSION = 1
+    private lateinit var name:TextView
+    private lateinit var temp:TextView
+    private lateinit var des:TextView
+    val postViewModel: PostViewModel by viewModels()
+    var latitude: Double = 35.0
+    var longitude: Double = -75.5
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initRecyclerView()
-        val postViewModel: PostViewModel by viewModels()
-        recyclerView = findViewById(R.id.recycleLayout)
-        if(isInternetAvailable(this)){
-            postRepo = PostRepo()
-            postViewModel.myResponse.observe(this, Observer {
-                Toast.makeText(this,it,Toast.LENGTH_LONG).show()
-            })
-        }else{
-            showToast(this,"Internet Not Available")
-        }
+        name=findViewById(R.id.textView)
+        temp=findViewById(R.id.temperature)
+        des=findViewById(R.id.sky)
+        val locManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        locManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            1000L,
+            500.0f,
+            mLocationListener
+        )
+
+        recyclerView = findViewById(R.id.recycleLayout)
+
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
 
     }
 
+    private fun isPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun enableMyLocation() {
+        if (isPermissionGranted()) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private val mLocationListener: LocationListener = LocationListener {
+        latitude = it.latitude
+        longitude = it.longitude
+        if (isInternetAvailable(this)) {
+            postRepo = PostRepo()
+            postViewModel.getWeather(it.latitude,it.longitude)
+            postViewModel.myResponse.observe(this, Observer {post->
+                name.text="Current weather: "+post.data?.get(0)?.cityName
+                temp.text="Temperature\n"+post.data?.get(0)?.temp+"°C"
+                des.text="Sky status\n"+post.data?.get(0)?.weather?.description
+            })
+        } else {
+            showToast(this, "Internet Not Available")
+        }
+    }
 
 
     private fun initRecyclerView() {
@@ -50,5 +140,9 @@ class MainActivity : AppCompatActivity() {
             adapter=postAdapter
 
         }
+    }
+
+    override fun onLocationChanged(p0: Location) {
+        TODO("Not yet implemented")
     }
 }
