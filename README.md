@@ -15,6 +15,5 @@
 # Demo Application
 
 <p align="center">
-  <img src="https://github.com/FakhrulASA/weatherLy-Clean-Architecture/blob/main/weath.jpg" width="550" title="App Demo">
-
+<img src="https://github.com/FakhrulASA/weatherLy-Clean-Architecture/blob/main/ab.jpg" width="450" title="App Demo">
 </p>
