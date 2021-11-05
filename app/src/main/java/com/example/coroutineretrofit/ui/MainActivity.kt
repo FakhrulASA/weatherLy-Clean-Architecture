@@ -2,12 +2,14 @@ package com.example.coroutineretrofit.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Service
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.coroutineretrofit.R
 import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.databinding.ActivityMainBinding
+import com.example.coroutineretrofit.model.WeatherData
+import com.example.coroutineretrofit.model.WeatherDataHourly
 import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
 import com.example.coroutineretrofit.util.Util.isInternetAvailable
@@ -26,7 +30,6 @@ import com.example.coroutineretrofit.util.Util.showToast
 class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var weatherRepository: WeatherRepository
     private lateinit var postAdapter: PostAdapter
-    private lateinit var recyclerView: RecyclerView
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var weatherRequestModel: WeatherRequestModel
     private lateinit var binding: ActivityMainBinding
@@ -38,12 +41,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        initRecyclerView()
+
         weatherRequestModel = WeatherRequestModel()
         initProgressBar()
         locManager = getSystemService(LOCATION_SERVICE) as LocationManager
         checkPermission()
-        recyclerView = findViewById(R.id.recycleLayout)
     }
 
     private fun checkPermission() {
@@ -112,6 +114,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     lon = location.longitude
                 }
             )
+            postViewModel.getHourly(
+                weatherRequestModel.apply {
+                    lat = location.latitude
+                    lon = location.longitude
+                }
+            )
             postViewModel.error.observe(this) {
                 when (it.isError) {
                     true -> showToast(this, it.message)
@@ -127,33 +135,31 @@ class MainActivity : AppCompatActivity(), LocationListener {
     @SuppressLint("SetTextI18n")
     private fun bindValue() {
         try {
+
             postViewModel.myResponse.observe(this, Observer { post ->
                 binding.textView.text = "Current weather: " + post.data?.get(0)?.cityName
                 binding.temperature.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
                 binding.windspeed.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
-                binding.feels.text = "Wind Direction\n" + when (post.data?.get(0)?.windCdir) {
-                    "N" -> "North"
-                    "S" -> "South"
-                    "W" -> "West"
-                    "E" -> "East"
-                    "SW" -> "South West"
-                    "SE" -> "South East"
-                    "NS" -> "North South"
-                    "NE" -> "North East"
-                    else -> "N/A"
-                }
+                binding.feels.text = "Wind Direction\n" +post.data?.get(0)?.windCdirFull
                 binding.sky.text = "Sky status\n" + post.data?.get(0)?.weather?.description
             })
+            postViewModel.myResponseHourly.observe(this, Observer { post ->
+                initRecyclerView(post.data!!)
+                showToast(this,post.data?.size.toString())
+            })
+
         } catch (e: Exception) {
             showToast(this,e.message.toString())
         }
     }
 
 
-    private fun initRecyclerView() {
-        recyclerView = findViewById(R.id.recycleLayout)
-        postAdapter = PostAdapter(this, ArrayList())
-        recyclerView.apply {
+    private fun initRecyclerView(weatherData: List<WeatherDataHourly.Companion.Datum>) {
+
+        postAdapter = PostAdapter(this, weatherData)
+        postAdapter.setData(weatherData)
+
+        binding.recycleLayout.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = postAdapter
