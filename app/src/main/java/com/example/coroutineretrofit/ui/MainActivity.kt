@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var weatherRequestModel: WeatherRequestModel
     private lateinit var binding: ActivityMainBinding
-    lateinit var locManager:LocationManager
+    lateinit var locManager: LocationManager
     val postViewModel: PostViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val view = binding.root
         setContentView(view)
         initRecyclerView()
-        weatherRequestModel= WeatherRequestModel()
+        weatherRequestModel = WeatherRequestModel()
         initProgressBar()
         locManager = getSystemService(LOCATION_SERVICE) as LocationManager
         checkPermission()
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_LOCATION_PERMISSION
             )
-        }else{
+        } else {
             locManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 1000L,
@@ -76,7 +76,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults.isNotEmpty()
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
             checkPermission()
         } else {
             checkPermission()
@@ -84,12 +85,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun initProgressBar() {
-       postViewModel.isLoading.observe(this,{
-           when(it){
-               true->binding.progressBar.visibility= View.VISIBLE
-               false->binding.progressBar.visibility= View.GONE
-           }
-       })
+        postViewModel.isLoading.observe(this, {
+            when (it) {
+                true -> binding.progressBar.visibility = View.VISIBLE
+                false -> binding.progressBar.visibility = View.GONE
+            }
+        })
     }
 
     private fun isPermissionGranted(): Boolean {
@@ -109,7 +110,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                showToast(this,"Need Permission")
+                showToast(this, "Need Permission")
             }
 
         } else {
@@ -123,40 +124,49 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private val mLocationListener: LocationListener = LocationListener { location->
+    private val mLocationListener: LocationListener = LocationListener { location ->
         if (isInternetAvailable(this)) {
             weatherRepository = WeatherRepository()
             postViewModel.getWeather(
                 weatherRequestModel.apply {
-                    lat=location.latitude
-                    lon=location.longitude
+                    lat = location.latitude
+                    lon = location.longitude
                 }
             )
             postViewModel.error.observe(this) {
                 when (it.isError) {
                     true -> showToast(this, it.message)
-                    false -> {
-                        postViewModel.myResponse.observe(this, Observer { post ->
-                            binding.textView.text = "Current weather: " + post.data?.get(0)?.cityName
-                            binding.temperature.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
-                            binding.windspeed.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
-                            binding.feels.text = "Wind Direction\n" + when(post.data?.get(0)?.windCdir){
-                                "N"->"North"
-                                "S"->"South"
-                                "W"->"West"
-                                "E"->"East"
-                                "SW"->"South West"
-                                "SE"->"South East"
-                                else -> "N/A"
-                            }
-                            binding.sky.text = "Sky status\n" + post.data?.get(0)?.weather?.description
-                        })
-                    }
+                    false -> bindValue()
                 }
             }
 
         } else {
             showToast(this, "Internet Not Available")
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun bindValue() {
+        try {
+            postViewModel.myResponse.observe(this, Observer { post ->
+                binding.textView.text = "Current weather: " + post.data?.get(0)?.cityName
+                binding.temperature.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
+                binding.windspeed.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
+                binding.feels.text = "Wind Direction\n" + when (post.data?.get(0)?.windCdir) {
+                    "N" -> "North"
+                    "S" -> "South"
+                    "W" -> "West"
+                    "E" -> "East"
+                    "SW" -> "South West"
+                    "SE" -> "South East"
+                    "NS" -> "North South"
+                    "NE" -> "North East"
+                    else -> "N/A"
+                }
+                binding.sky.text = "Sky status\n" + post.data?.get(0)?.weather?.description
+            })
+        } catch (e: Exception) {
+            showToast(this,e.message.toString())
         }
     }
 
