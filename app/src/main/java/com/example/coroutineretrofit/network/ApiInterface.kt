@@ -4,19 +4,24 @@ import com.example.coroutineretrofit.model.WeatherData
 import com.example.coroutineretrofit.model.WeatherDataHourly
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface ApiInterface {
     @GET("current")
-    @Headers("Content-Type:application/x-www-form-urlencoded","x-rapidapi-host:weatherbit-v1-mashape.p.rapidapi.com","x-rapidapi-key:9b331297cfmsh8758e425c669262p177a17jsn246545f467d2")
     fun getPost(
+        @Header("Content-Type") contentType:String,
+        @Header("x-rapidapi-host") apiHost:String,
+        @Header("x-rapidapi-key") apiKey:String,
         @Query("lat") lat:Double,
         @Query("lon") lon:Double
     ): Call<WeatherData>
     @GET("/forecast/3hourly")
-    @Headers("Content-Type:application/x-www-form-urlencoded","x-rapidapi-host:weatherbit-v1-mashape.p.rapidapi.com","x-rapidapi-key:9b331297cfmsh8758e425c669262p177a17jsn246545f467d2")
     fun getHourly(
+        @Header("Content-Type") contentType:String,
+        @Header("x-rapidapi-host") apiHost:String,
+        @Header("x-rapidapi-key") apiKey:String,
         @Query("lat") lat:Double,
         @Query("lon") lon:Double
     ): Call<WeatherDataHourly>

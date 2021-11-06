@@ -2,8 +2,11 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="8dp"
+    app:cardElevation="5dp"
+    android:outlineAmbientShadowColor="@color/purple_500"
     app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="true"
+    app:cardMaxElevation="5dp"
     app:cardCornerRadius="10dp"
     android:layout_height="wrap_content">
 

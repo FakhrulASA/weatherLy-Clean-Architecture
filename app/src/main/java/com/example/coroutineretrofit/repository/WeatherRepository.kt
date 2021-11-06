@@ -7,11 +7,20 @@ import com.example.coroutineretrofit.network.RetroBuilder
 import retrofit2.Call
 
 class WeatherRepository:ApiInterface {
-    override fun getPost(lat: Double, lon: Double): Call<WeatherData> {
-        return  RetroBuilder.api.getPost(lat,lon)
-    }
 
-    override fun getHourly(lat: Double, lon: Double): Call<WeatherDataHourly> {
-        return  RetroBuilder.api.getHourly(lat,lon)
-    }
+    override fun getPost(
+        contentType: String,
+        apiHost: String,
+        apiKey: String,
+        lat: Double,
+        lon: Double
+    ): Call<WeatherData>  = RetroBuilder.api.getPost(contentType,apiHost,apiKey,lat,lon)
+    override fun getHourly(
+        contentType: String,
+        apiHost: String,
+        apiKey: String,
+        lat: Double,
+        lon: Double
+    ): Call<WeatherDataHourly> = RetroBuilder.api.getHourly(contentType,apiHost,apiKey,lat,lon)
+
 }
