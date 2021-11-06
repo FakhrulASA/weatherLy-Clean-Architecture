@@ -11,10 +11,10 @@
 #### 9. LocationManager and LocationListener
 #### 10. GPS and GPS Permission
 
-### Docs: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html, https://developer.android.com/jetpack/guide
-### Api: https://rapidapi.com/weatherbit/api/weather/
-### SOLID: https://academy.realm.io/posts/learning-path-solid-principles-for-android/
-# Demo Application
+##### Docs: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html, https://developer.android.com/jetpack/guide
+##### Api: https://rapidapi.com/weatherbit/api/weather/
+##### SOLID: https://academy.realm.io/posts/learning-path-solid-principles-for-android/
+## Demo Application
 
 <p align="center">
 <img src="https://github.com/FakhrulASA/weatherLy-Clean-Architecture/blob/main/ab.jpg" width="450" title="App Demo">
