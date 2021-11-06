@@ -21,7 +21,7 @@ class WeatherDataHourly {
 
             @SerializedName("rh")
             @Expose
-            val rh:  Double? = null
+            val rh: Double? = null
 
             @SerializedName("pod")
             @Expose
@@ -33,7 +33,7 @@ class WeatherDataHourly {
 
             @SerializedName("pres")
             @Expose
-            val pres:  Double? = null
+            val pres: Double? = null
 
             @SerializedName("solar_rad")
             @Expose
@@ -57,15 +57,15 @@ class WeatherDataHourly {
 
             @SerializedName("snow_depth")
             @Expose
-            val snowDepth:  Double? = null
+            val snowDepth: Double? = null
 
             @SerializedName("clouds")
             @Expose
-            val clouds:  Double? = null
+            val clouds: Double? = null
 
             @SerializedName("ts")
             @Expose
-            val ts:  Double? = null
+            val ts: Double? = null
 
             @SerializedName("wind_spd")
             @Expose
@@ -73,7 +73,7 @@ class WeatherDataHourly {
 
             @SerializedName("pop")
             @Expose
-            val pop:  Double? = null
+            val pop: Double? = null
 
             @SerializedName("wind_cdir_full")
             @Expose
@@ -81,7 +81,7 @@ class WeatherDataHourly {
 
             @SerializedName("slp")
             @Expose
-            val slp:  Double? = null
+            val slp: Double? = null
 
             @SerializedName("dni")
             @Expose
@@ -93,7 +93,7 @@ class WeatherDataHourly {
 
             @SerializedName("snow")
             @Expose
-            val snow:  Double? = null
+            val snow: Double? = null
 
             @SerializedName("uv")
             @Expose
@@ -101,15 +101,15 @@ class WeatherDataHourly {
 
             @SerializedName("wind_dir")
             @Expose
-            val windDir:  Double? = null
+            val windDir: Double? = null
 
             @SerializedName("clouds_hi")
             @Expose
-            val cloudsHi:  Double? = null
+            val cloudsHi: Double? = null
 
             @SerializedName("precip")
             @Expose
-            val precip:  Double? = null
+            val precip: Double? = null
 
             @SerializedName("vis")
             @Expose
@@ -137,11 +137,11 @@ class WeatherDataHourly {
 
             @SerializedName("clouds_mid")
             @Expose
-            val cloudsMid:  Double? = null
+            val cloudsMid: Double? = null
 
             @SerializedName("clouds_low")
             @Expose
-            val cloudsLow:  Double? = null
+            val cloudsLow: Double? = null
 
         }
 

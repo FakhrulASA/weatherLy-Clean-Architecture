@@ -36,6 +36,7 @@ class PostViewModel : ViewModel() {
         }
 
     }
+
     fun getHourly(weatherRequestModel: WeatherRequestModel) {
         isLoading.postValue(true)
         CoroutineScope(Dispatchers.IO).launch {
@@ -45,7 +46,7 @@ class PostViewModel : ViewModel() {
                 isLoading.postValue(false)
             }, {
                 error.postValue(ErrorBody(true, it))
-                Log.d("errorCode",it)
+                Log.d("errorCode", it)
                 isLoading.postValue(false)
             })
         }

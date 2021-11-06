@@ -2,25 +2,20 @@ package com.example.coroutineretrofit.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Service
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.coroutineretrofit.R
 import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.databinding.ActivityMainBinding
-import com.example.coroutineretrofit.model.WeatherData
 import com.example.coroutineretrofit.model.WeatherDataHourly
 import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
@@ -140,16 +135,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 binding.textView.text = "Current weather: " + post.data?.get(0)?.cityName
                 binding.temperature.text = "Temperature\n" + post.data?.get(0)?.temp + "°C"
                 binding.windspeed.text = "Wind Speed\n" + post.data?.get(0)?.windSpd + "/km"
-                binding.feels.text = "Wind Direction\n" +post.data?.get(0)?.windCdirFull
+                binding.feels.text = "Wind Direction\n" + post.data?.get(0)?.windCdirFull
                 binding.sky.text = "Sky status\n" + post.data?.get(0)?.weather?.description
             })
             postViewModel.myResponseHourly.observe(this, Observer { post ->
                 initRecyclerView(post.data!!)
-                showToast(this,post.data?.size.toString())
+                showToast(this, post.data?.size.toString())
             })
 
         } catch (e: Exception) {
-            showToast(this,e.message.toString())
+            showToast(this, e.message.toString())
         }
     }
 
