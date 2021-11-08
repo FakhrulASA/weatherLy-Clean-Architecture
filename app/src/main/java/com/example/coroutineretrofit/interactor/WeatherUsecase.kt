@@ -5,12 +5,13 @@ import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class WeatherUsecase {
     var weatherRepository: WeatherRepository = WeatherRepository()
-
-    operator fun invoke(
+    private val job = CoroutineScope(Dispatchers.IO)
+    fun invoke(
         weatherRequestModel: WeatherRequestModel,
         isSuccess: (WeatherData) -> Unit,
         isFailed: (String) -> Unit
@@ -30,5 +31,9 @@ class WeatherUsecase {
                 }
             }
         }
+    }
+    fun cancel(onCancelled:()->Unit){
+        job.cancel("Job Cancelled")
+        onCancelled.invoke()
     }
 }

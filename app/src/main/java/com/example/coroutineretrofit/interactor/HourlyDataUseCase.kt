@@ -5,12 +5,14 @@ import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class HourlyDataUseCase {
     var weatherRepository: WeatherRepository = WeatherRepository()
+    private val job = CoroutineScope(Dispatchers.IO)
 
-    operator fun invoke(weatherRequestModel: WeatherRequestModel, isSuccess:(WeatherDataHourly)->Unit, isFailed:(String)->Unit) {
+    fun invoke(weatherRequestModel: WeatherRequestModel, isSuccess:(WeatherDataHourly)->Unit, isFailed:(String)->Unit) {
         val weather = weatherRepository.getHourly(
             weatherRequestModel.type,
             weatherRequestModel.host,
@@ -18,7 +20,7 @@ class HourlyDataUseCase {
             weatherRequestModel.lat,
             weatherRequestModel.lon
         )
-        CoroutineScope(Dispatchers.IO).launch {
+        job.launch {
             weather.execute().apply {
                 when (this.isSuccessful){
                     true->isSuccess.invoke(this.body()!!)
@@ -26,5 +28,9 @@ class HourlyDataUseCase {
                 }
             }
         }
+    }
+    fun cancel(onCancelled:()->Unit){
+        job.cancel("Job Cancelled")
+        onCancelled.invoke()
     }
 }

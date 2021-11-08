@@ -8,6 +8,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -16,6 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coroutineretrofit.adapter.PostAdapter
 import com.example.coroutineretrofit.databinding.ActivityMainBinding
+import com.example.coroutineretrofit.interactor.HourlyDataUseCase
+import com.example.coroutineretrofit.interactor.WeatherUsecase
 import com.example.coroutineretrofit.model.WeatherDataHourly
 import com.example.coroutineretrofit.model.WeatherRequestModel
 import com.example.coroutineretrofit.repository.WeatherRepository
@@ -30,18 +33,29 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var binding: ActivityMainBinding
     lateinit var locManager: LocationManager
     val postViewModel: PostViewModel by viewModels()
-
+    lateinit var hourlyDataUseCase: HourlyDataUseCase
+    lateinit var weatherUsecase: WeatherUsecase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
         weatherRequestModel = WeatherRequestModel()
         initProgressBar()
         locManager = getSystemService(LOCATION_SERVICE) as LocationManager
         checkPermission()
+        hourlyDataUseCase= HourlyDataUseCase()
+        weatherUsecase= WeatherUsecase()
+        binding.parentCL.setOnClickListener {
+            hourlyDataUseCase.cancel{
+                showToast(this,"Hourly data job cancelled")
+            }
+            weatherUsecase.cancel{
+                showToast(this,"Weather data job cancelled")
+            }
+        }
     }
+
 
     private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(
