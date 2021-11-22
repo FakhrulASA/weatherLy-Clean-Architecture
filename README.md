@@ -10,6 +10,7 @@
 #### 8. ViewBinding and DataBinding
 #### 9. LocationManager and LocationListener
 #### 10. GPS and GPS Permission
+#### 11. Geocoding and Reverse Geocoding
 
 ##### Docs: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html, https://developer.android.com/jetpack/guide
 ##### Api: https://rapidapi.com/weatherbit/api/weather/
